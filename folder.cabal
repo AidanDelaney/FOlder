@@ -1,0 +1,45 @@
+Name: folder
+Version: 0.1
+Author: Aidan Delaney <a.j.delaney@brighton.ac.uk>
+Copyright: 2011 Aidan Delaey
+Stability: Experimental
+Category: Web
+Synopsis: A simple web document creator
+Description:
+	Allows you to create a folder of documents on the web.
+Cabal-version: >= 1.4.0.0
+Build-type: Custom
+Data-files: 
+
+Flag base4
+    Description: Choose the even newer, even smaller, split-up base package.
+
+Executable foldr-server
+ Main-Is: Main.hs
+ hs-source-dirs: src
+
+ GHC-Options: -threaded -Wall -Wwarn -O2 -fno-warn-name-shadowing -fno-warn-missing-signatures -fwarn-tabs -fno-warn-unused-binds -fno-warn-orphans -fwarn-unused-imports
+ Build-depends: extensible-exceptions,
+                happstack,
+                happstack-data,
+                happstack-hsp,
+--                happstack-hstringtemplate,
+                happstack-server,
+                happstack-state,
+                happstack-util,
+                hsp,
+                hsx,
+                hslogger,
+                mtl,
+                old-time,
+                old-locale,
+                utf8-string
+
+
+
+ if !os(windows)
+   -- Cabal has a bug on windows and cannot find trhsx
+   Build-Tools: trhsx
+
+ if flag(base4)
+    Build-Depends: base >= 4 && < 5, syb
