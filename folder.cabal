@@ -23,7 +23,7 @@ Executable foldr-server
                 happstack,
                 happstack-data,
                 happstack-hsp,
---                happstack-hstringtemplate,
+                happstack-ixset,
                 happstack-server,
                 happstack-state,
                 happstack-util,
@@ -33,7 +33,9 @@ Executable foldr-server
                 mtl,
                 old-time,
                 old-locale,
-                utf8-string
+                utf8-string,
+                safecopy,
+                acid-state
 
 
 
