@@ -34,10 +34,7 @@ getFoldr =
 
 getDocument = 
     do methodM GET
-       path $ \did -> (doStuff did)
---         case all isNumber id of
---           False -> appTemplate "Folder" foldrEditableHeaders foldrDefaultBlurb
---           True  -> (appTemplate "Folder" foldrEditableHeaders ("id:" ++ id))
+       path doStuff
 
 instance Read a => FromReqURI (Maybe a) where
     fromReqURI did =
