@@ -2,24 +2,25 @@
 {-# OPTIONS_GHC -F -pgmFtrhsx #-}
 module Pages.AppTemplate where
 
-import Control.Applicative ((<$>))
+import Control.Applicative       ((<$>))
 import HSP
-import Happstack.Server    (ServerPart, ServerPartT, Response, toResponse)
-import HSP.ServerPartT     () -- instance XMLGenerator (ServerPartT m)
+import Happstack.Server          (ServerPart, ServerPartT, Response, toResponse)
+import HSP.ServerPartT           () -- instance XMLGenerator (ServerPartT m)
 import Happstack.Server.HSP.HTML ()
+import State                     (App)
 
 appTemplate ::
-    ( EmbedAsChild (ServerPartT IO) headers
-    , EmbedAsChild (ServerPartT IO) body
+    ( EmbedAsChild (App) headers
+    , EmbedAsChild (App) body
     ) =>
-    String -> headers -> body -> ServerPart Response
+    String -> headers -> body -> App Response
 appTemplate title headers body = toResponse <$> (unXMLGenT (appTemplate' title headers body))
 
 appTemplate' :: 
-    ( EmbedAsChild (ServerPartT IO) headers
-    , EmbedAsChild (ServerPartT IO) body
+    ( EmbedAsChild (App) headers
+    , EmbedAsChild (App) body
     ) =>
-    String -> headers -> body -> XMLGenT (ServerPartT IO) XML
+    String -> headers -> body -> XMLGenT (App) XML
 appTemplate' title headers body =
   <html>
   <head>

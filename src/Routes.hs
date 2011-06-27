@@ -7,8 +7,9 @@ import Happstack.Server ( Browsing(EnableBrowsing), Method(GET), Response, Serve
                         , seeOther, toResponse)
 --import Happstack.Authenticate
 import Pages            (foldrDocument)
+import State            (App)
 
-routes :: ServerPart Response
+routes :: App Response
 routes = 
     do decodeBody (defaultBodyPolicy "/tmp/" 4096 4096 4096)        -- decode the request body if present. 
        msum [ -- dir "login" $ withSession (\_ -> rootRedirect) defaultRoutes, 

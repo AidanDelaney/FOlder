@@ -13,10 +13,11 @@ import Data.Char                 (isSpace, digitToInt)
 import HSP.ServerPartT           ()
 import Happstack.Server.HSP.HTML ()
 import Pages.AppTemplate         (appTemplate)
+import State                     (App)
 import State.Foldr               (DocId(..))
 import qualified State.Foldr as State
 
-foldrDocument :: ServerPart Response
+foldrDocument :: App Response
 foldrDocument =
        -- TODO: Need CRUD for Foldr Documents
        -- GET /      -> This users Foldr of Documents
@@ -25,14 +26,14 @@ foldrDocument =
        -- PUT /id    -> edit doc of specific id
        -- DELETE /id -> delete doc of specific id
        -- /new       -> Form which POSTs content to /
-       msum [getDocument, getFoldr, newDocument]
+       msum [getFoldr, getDocument]
 
---getFoldr :: ServerPartT IO (HSP XML)
+getFoldr :: App Response
 getFoldr = 
     do methodM GET
        appTemplate "Folder" foldrEditableHeaders foldrDefaultBlurb
 
-
+getDocument :: App Response
 getDocument = 
     do methodOnly GET
        path $  getDocumentById
@@ -43,7 +44,7 @@ instance FromReqURI DocId where
           [(x, rest)] | all isSpace rest -> Just (DocId x)
           _         -> Nothing
 
-getDocumentById :: DocId -> ServerPartT IO Response
+getDocumentById :: DocId -> App Response
 getDocumentById did = appTemplate "Folder" foldrEditableHeaders ("id:" ++ (show did))
 
 newDocument =
@@ -52,7 +53,7 @@ newDocument =
           appTemplate "Folder: New Document" foldrEditableHeaders "Type content here"
 
 -- TODO: After template mangling, what exactly is the return type of this?
---foldrEditableHeaders :: ServerPartT IO (HSP XML)
+foldrEditableHeaders :: XMLGenT (App) XML
 foldrEditableHeaders = 
   <script type="text/javascript">
   GENTICS.Aloha.settings = {

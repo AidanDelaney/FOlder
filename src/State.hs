@@ -2,30 +2,13 @@
     FlexibleInstances, MultiParamTypeClasses, FlexibleContexts,
     UndecidableInstances, TypeOperators
     #-}
-module State where
+module State (App) where
 
-import Happstack.Data  (Default, Version(..), deriveSerialize, defaultValue, deriveAll)
-import Happstack.State ((:+:), Component(..), Dependencies, End, mkMethods)
-import Happstack.Data  (defaultValue)
-import Data.SafeCopy
-import State.Foldr     (Foldr)
+import Data.Acid            (AcidState(..))
+import Happstack.Server     (ServerPartT)
+import Control.Monad.Reader (ReaderT)
+import State.Foldr          (Foldr)
 
--- |top-level application state
--- in this case, the top-level state itself does not contain any state
--- TODO: remove this legacy
-$(deriveAll [''Show, ''Eq, ''Ord, ''Default]
-  [d|
-      data AppState = AppState
-   |])
+-- |App - Allows access to the AcidState via ReaderT
+type App = ServerPartT (ReaderT (AcidState Foldr) IO)
 
-$(deriveSerialize ''AppState)
-instance Happstack.Data.Version AppState
-
--- |top-level application component
--- we depend on the Foldr component
-instance Component AppState where
-  type Dependencies AppState = End
-  initialValue = defaultValue
-  
--- create types for event serialization
-$(mkMethods ''AppState [])
