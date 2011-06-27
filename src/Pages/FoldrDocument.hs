@@ -7,13 +7,14 @@ module Pages.FoldrDocument
 import Control.Monad             (msum)
 import Data.Maybe                (isNothing)
 import HSP
-import Happstack.Server          (FromReqURI(..), Method(GET, PUT, POST, DELETE), Response, ServerPart, ServerPartT, methodM, dir, path, ok)
+import Happstack.Server          (FromReqURI(..), Method(GET, PUT, POST, DELETE), Response, ServerPart, ServerPartT, methodM, dir, path, methodOnly)
 import Data.Acid
 import Data.Char                 (isSpace, digitToInt)
 import HSP.ServerPartT           ()
 import Happstack.Server.HSP.HTML ()
 import Pages.AppTemplate         (appTemplate)
 import State.Foldr               (DocId(..))
+import qualified State.Foldr as State
 
 foldrDocument :: ServerPart Response
 foldrDocument =
