@@ -11,7 +11,7 @@ import Happstack.Data.IxSet                  (IxSet(..), ixSet, ixGen, Indexable
 import qualified Happstack.Data.IxSet        as IxSet
 import Data.Int
 
-newtype DocId = DocId Int64 deriving (Eq, Ord, Show, Data, Typeable)
+newtype DocId = DocId Int64 deriving (Eq, Ord, Show, Data, Typeable, Read)
 
 -- |Document - Meta-information about a document and the editable content.
 data Document = Document

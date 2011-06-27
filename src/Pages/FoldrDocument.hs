@@ -4,27 +4,60 @@ module Pages.FoldrDocument
      ( foldrDocument 
      ) where
 
+import Control.Monad             (msum)
+import Data.Maybe                (isNothing)
 import HSP
-import Happstack.Server          (Method(GET), Response, ServerPart, ServerPartT, methodM)
+import Happstack.Server          (FromReqURI(..), Method(GET, PUT, POST, DELETE), Response, ServerPart, ServerPartT, methodM, dir, path, ok)
 import Data.Acid
+import Data.Char                 (isNumber, digitToInt)
 import HSP.ServerPartT           ()
 import Happstack.Server.HSP.HTML ()
 import Pages.AppTemplate         (appTemplate)
-import State.Foldr
+import State.Foldr               (DocId(..))
 
 foldrDocument :: ServerPart Response
 foldrDocument =
-    do methodM GET
        -- TODO: Need CRUD for Foldr Documents
-       -- /          -> This users Foldr of Documents
-       -- /create    -> create a new doc
-       -- /id        -> read doc of specific id
-       -- /id/edit   -> edit doc of specific id
-       -- /id/delete -> delete doc of specific id
-       appTemplate "Some Title" foldrEditableHeaders "Hello World"
+       -- GET /      -> This users Foldr of Documents
+       -- POST /     -> create a new doc
+       -- GET /id    -> read doc of specific id
+       -- PUT /id    -> edit doc of specific id
+       -- DELETE /id -> delete doc of specific id
+       -- /new       -> Form which POSTs content to /
+       msum [getDocument, newDocument]
+
+--getFoldr :: ServerPartT IO (HSP XML)
+getFoldr = 
+    do methodM GET
+       appTemplate "Folder" foldrEditableHeaders foldrDefaultBlurb
+
+
+getDocument = 
+    do methodM GET
+       path $ \did -> (doStuff did)
+--         case all isNumber id of
+--           False -> appTemplate "Folder" foldrEditableHeaders foldrDefaultBlurb
+--           True  -> (appTemplate "Folder" foldrEditableHeaders ("id:" ++ id))
+
+instance Read a => FromReqURI (Maybe a) where
+    fromReqURI did =
+      case reads did of
+        [(x, rest)] | all isNumber rest -> Just x
+        _         -> Nothing
+
+doStuff did =
+    if isNothing did then
+      appTemplate "Folder" foldrEditableHeaders foldrDefaultBlurb
+    else
+      appTemplate "Folder" foldrEditableHeaders "id:"
+
+newDocument =
+    dir "new" $
+       do methodM GET
+          appTemplate "Folder: New Document" foldrEditableHeaders "Type content here"
 
 -- TODO: After template mangling, what exactly is the return type of this?
---foldrEditableHeaders :: ServerPartT IO
+--foldrEditableHeaders :: ServerPartT IO (HSP XML)
 foldrEditableHeaders = 
   <script type="text/javascript">
   GENTICS.Aloha.settings = {
@@ -56,3 +89,10 @@ foldrEditableHeaders =
 	$('#content').aloha();
   });  
   </script>
+
+foldrDefaultBlurb = 
+  <div>
+  <h1>Welcome to Folder</h1>
+  <p>You can't save the changes to this document, but click on some of the text to see what Folder allows you to do.</p>
+  <p>To create a new document <a href="/foldr/create">Click here</a>.</p>
+  </div>

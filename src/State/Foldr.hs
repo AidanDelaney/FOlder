@@ -4,6 +4,7 @@
     #-}
 module State.Foldr
   (    Foldr(..)
+     , DocId(..)
      , getDocument
      , addDocument
   ) where
@@ -14,7 +15,7 @@ import Control.Monad.Reader              (ask)
 import Control.Monad.State               (modify, get, put)
 import qualified Happstack.Data.IxSet as IxSet
 import Happstack.Data.IxSet              (IxSet(..), (@=))
-import Happstack.State                   (Dependencies, End, mkMethods)
+--import Happstack.State                   (Dependencies, End, mkMethods)
 import Types.Foldr
 
 -- | get a 'Document' from a 'Foldr'
