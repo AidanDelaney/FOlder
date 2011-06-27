@@ -24,7 +24,7 @@ foldrDocument =
        -- PUT /id    -> edit doc of specific id
        -- DELETE /id -> delete doc of specific id
        -- /new       -> Form which POSTs content to /
-       msum [getDocument, newDocument]
+       msum [getDocument, getFoldr, newDocument]
 
 --getFoldr :: ServerPartT IO (HSP XML)
 getFoldr = 
@@ -34,7 +34,7 @@ getFoldr =
 
 getDocument = 
     do methodM GET
-       path doStuff
+       path getDocumentById
 
 instance FromReqURI DocId where
     fromReqURI s =
@@ -43,8 +43,8 @@ instance FromReqURI DocId where
         _         -> Nothing
 
 
-doStuff :: DocId -> ServerPartT IO Response
-doStuff did = appTemplate "Folder" foldrEditableHeaders "id:"
+getDocumentById :: DocId -> ServerPartT IO Response
+getDocumentById did = appTemplate "Folder" foldrEditableHeaders "id:"
 
 newDocument =
     dir "new" $
