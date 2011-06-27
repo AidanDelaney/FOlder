@@ -20,7 +20,7 @@ data Document = Document
     , title     :: String
 --  , ctime     :: ClockTime
 --  , mtime     :: ClockTime
-    , editables :: [[(String, String)]] -- all changes to each editable FIXME: Should be HTML5 fragment
+    , content   :: String
   } deriving (Show, Eq, Ord, Data, Typeable)
 
 instance Indexable Document where
