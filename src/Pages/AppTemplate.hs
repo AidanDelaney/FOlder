@@ -26,6 +26,8 @@ appTemplate' title headers body =
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <title><% title %></title>
 
+  <link rel="stylesheet" href="/theme/AlohaDocument.css" />
+
   <script type="text/javascript" src="/js/aloha/aloha.js"></script>
   <script type="text/javascript" src="/js/aloha/plugins/com.gentics.aloha.plugins.Format/plugin.js"></script>
   <script type="text/javascript" src="/js/aloha/plugins/com.gentics.aloha.plugins.Table/plugin.js"></script>
@@ -33,39 +35,6 @@ appTemplate' title headers body =
   <script type="text/javascript" src="/js/aloha/plugins/com.gentics.aloha.plugins.Link/plugin.js"></script>
   <script type="text/javascript" src="/js/aloha/plugins/eu.phoric.aloha.plugins.Save/plugin.js"></script>
 
-
-  <link rel="stylesheet" href="/theme/AlohaDocument.css" />
-
-  <script type="text/javascript">
-  GENTICS.Aloha.settings = {
-	logLevels: {'error': true, 'warn': true, 'info': true, 'debug': true},
-	errorhandling : false,
-	ribbon: false,
-	"i18n": {
-		"acceptLanguage": 'en'
-	},
-	"plugins": {
-	 	"com.gentics.aloha.plugins.Link": {
-		  	// all links that match the targetregex will get set the target
- 			// e.g. ^(?!.*aloha-editor.com).* matches all href except aloha-editor.com
-		  	targetregex : '^(?!.*aloha-editor.com).*',
-		  	// this target is set when either targetregex matches or not set
-		    // e.g. _blank opens all links in new window
-		  	target : '_blank',
-		  	// the same for css class as for target
-		  	cssclassregex : '^(?!.*aloha-editor.com).*',
-		  	cssclass : 'external'
-		},
-	 	"com.gentics.aloha.plugins.Table": {
-			config: ['table']
-		}
-  	}
-  };
-
-  $(document).ready(function() {
-	$('#content').aloha();
-  });  
-  </script>
   <% headers %>
   </head>
   <body>
