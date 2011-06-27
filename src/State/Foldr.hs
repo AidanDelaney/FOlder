@@ -5,16 +5,14 @@
 module State.Foldr
   (    Foldr(..)
      , DocId(..)
-     , getDocument
-     , addDocument
+     , GetDocument(..)
   ) where
 
 import Data.Acid
-import Control.Applicative               ( (<$>) )
 import Control.Monad.Reader              (ask)
-import Control.Monad.State               (modify, get, put)
+import Control.Monad.State               (get, put)
 import qualified Happstack.Data.IxSet as IxSet
-import Happstack.Data.IxSet              (IxSet(..), (@=))
+import Happstack.Data.IxSet              (IxSet, (@=))
 --import Happstack.State                   (Dependencies, End, mkMethods)
 import Types.Foldr
 

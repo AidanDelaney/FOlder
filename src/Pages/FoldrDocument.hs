@@ -5,6 +5,7 @@ module Pages.FoldrDocument
      ) where
 
 import Control.Monad             (msum)
+import Control.Monad.Reader      (ask)
 import Data.Maybe                (isNothing)
 import HSP
 import Happstack.Server          (FromReqURI(..), Method(GET, PUT, POST, DELETE), Response, ServerPart, ServerPartT, methodM, dir, path, methodOnly)
@@ -12,10 +13,10 @@ import Data.Acid
 import Data.Char                 (isSpace, digitToInt)
 import HSP.ServerPartT           ()
 import Happstack.Server.HSP.HTML ()
+import Happstack.Data.IxSet      (getOne)
 import Pages.AppTemplate         (appTemplate)
 import State                     (App)
-import State.Foldr               (DocId(..))
-import qualified State.Foldr as State
+import State.Foldr               (DocId(..), GetDocument(..))
 
 foldrDocument :: App Response
 foldrDocument =
@@ -44,8 +45,14 @@ instance FromReqURI DocId where
           [(x, rest)] | all isSpace rest -> Just (DocId x)
           _         -> Nothing
 
+query_ e = do store <- ask ; query' store e
+
 getDocumentById :: DocId -> App Response
-getDocumentById did = appTemplate "Folder" foldrEditableHeaders ("id:" ++ (show did))
+getDocumentById did =
+    let document = query_ (GetDocument did) in
+    do
+      docset <- document
+      appTemplate "Folder" foldrEditableHeaders ("doc:" ++ (show (getOne docset)))
 
 newDocument =
     dir "new" $
