@@ -33,18 +33,17 @@ getFoldr =
 
 
 getDocument = 
-    do methodM GET
-       path getDocumentById
+    do methodOnly GET
+       path $  getDocumentById
 
 instance FromReqURI DocId where
-    fromReqURI s =
-      case reads s of
-        [(x, rest)] | all isSpace rest -> Just (DocId x)
-        _         -> Nothing
-
+    fromReqURI s = 
+        case reads s of
+          [(x, rest)] | all isSpace rest -> Just (DocId x)
+          _         -> Nothing
 
 getDocumentById :: DocId -> ServerPartT IO Response
-getDocumentById did = appTemplate "Folder" foldrEditableHeaders "id:"
+getDocumentById did = appTemplate "Folder" foldrEditableHeaders ("id:" ++ (show did))
 
 newDocument =
     dir "new" $
