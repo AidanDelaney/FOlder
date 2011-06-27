@@ -9,7 +9,7 @@ import Data.Maybe                (isNothing)
 import HSP
 import Happstack.Server          (FromReqURI(..), Method(GET, PUT, POST, DELETE), Response, ServerPart, ServerPartT, methodM, dir, path, ok)
 import Data.Acid
-import Data.Char                 (isNumber, digitToInt)
+import Data.Char                 (isSpace, digitToInt)
 import HSP.ServerPartT           ()
 import Happstack.Server.HSP.HTML ()
 import Pages.AppTemplate         (appTemplate)
@@ -36,17 +36,15 @@ getDocument =
     do methodM GET
        path doStuff
 
-instance Read a => FromReqURI (Maybe a) where
-    fromReqURI did =
-      case reads did of
-        [(x, rest)] | all isNumber rest -> Just x
+instance FromReqURI DocId where
+    fromReqURI s =
+      case reads s of
+        [(x, rest)] | all isSpace rest -> Just (DocId x)
         _         -> Nothing
 
-doStuff did =
-    if isNothing did then
-      appTemplate "Folder" foldrEditableHeaders foldrDefaultBlurb
-    else
-      appTemplate "Folder" foldrEditableHeaders "id:"
+
+doStuff :: DocId -> ServerPartT IO Response
+doStuff did = appTemplate "Folder" foldrEditableHeaders "id:"
 
 newDocument =
     dir "new" $
