@@ -8,7 +8,9 @@ import Control.Monad             (msum)
 import Control.Monad.Reader      (ask)
 import Data.Maybe                (isNothing)
 import HSP
-import Happstack.Server          (FromReqURI(..), Method(GET, PUT, POST, DELETE), Response, ServerPart, ServerPartT, methodM, dir, path, methodOnly)
+import Happstack.Server          (FromReqURI(..), Method(GET, PUT, POST, DELETE), 
+                                  Response, ServerPart, ServerPartT, methodM, dir, 
+                                  path, methodOnly, seeOther, toResponse)
 import Data.Acid
 import Data.Char                 (isSpace, digitToInt)
 import HSP.ServerPartT           ()
@@ -16,7 +18,8 @@ import Happstack.Server.HSP.HTML ()
 import Happstack.Data.IxSet      (getOne)
 import Pages.AppTemplate         (appTemplate)
 import State                     (App)
-import State.Foldr               (DocId(..), GetDocument(..))
+import State.Foldr               (DocId(..), GetDocument(..), AddDocument(..), GetNextDocId(..))
+import Types.Foldr               (Foldr(..), Document(..))
 
 foldrDocument :: App Response
 foldrDocument =
@@ -27,7 +30,7 @@ foldrDocument =
        -- PUT /id    -> edit doc of specific id
        -- DELETE /id -> delete doc of specific id
        -- /new       -> Form which POSTs content to /
-       msum [getFoldr, getDocument]
+       msum [getFoldr, getDocument, newDocument]
 
 getFoldr :: App Response
 getFoldr = 
@@ -45,7 +48,8 @@ instance FromReqURI DocId where
           [(x, rest)] | all isSpace rest -> Just (DocId x)
           _         -> Nothing
 
-query_ e = do store <- ask ; query' store e
+query_  e = do store <- ask ; query' store e
+update_ e = do store <- ask ; update' store e
 
 getDocumentById :: DocId -> App Response
 getDocumentById did =
@@ -54,10 +58,15 @@ getDocumentById did =
       docset <- document
       appTemplate "Folder" foldrEditableHeaders ("doc:" ++ (show (getOne docset)))
 
+newDocument :: App Response
 newDocument =
     dir "new" $
        do methodM GET
-          appTemplate "Folder: New Document" foldrEditableHeaders "Type content here"
+          did   <- query_ GetNextDocId
+          update_ (AddDocument (mkDoc did))
+          seeOther ("/foldr/" ++ (show did)) (toResponse ())
+          where
+            mkDoc next = Document "Anonymous" next "Default title" "<p>Blank document</p>"
 
 -- TODO: After template mangling, what exactly is the return type of this?
 foldrEditableHeaders :: XMLGenT (App) XML

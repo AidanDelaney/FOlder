@@ -69,7 +69,7 @@ waitForTermination
 
 main = 
   do
-    state <- openAcidState (Foldr empty) 
+    state <- openAcidState (Foldr empty 0) 
     simpleHTTP nullConf $ mapServerPartT (\m -> runReaderT m (state)) routes
 {-
 withLogger $ do
