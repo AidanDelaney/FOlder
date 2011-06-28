@@ -35,7 +35,8 @@ Executable foldr-server
                 old-locale,
                 utf8-string,
                 safecopy,
-                acid-state
+                acid-state,
+                text
 
 
 

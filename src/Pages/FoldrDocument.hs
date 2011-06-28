@@ -12,9 +12,11 @@ import HSP
 import Happstack.Server
 import Data.Acid
 import Data.Char                 (isSpace, digitToInt)
+import qualified Data.Text as T
 import HSP.ServerPartT           ()
 import Happstack.Server.HSP.HTML ()
 import Happstack.Data.IxSet      (getOne)
+
 import Pages.AppTemplate         (appTemplate)
 import State                     (App)
 import State.Foldr               (DocId(..), GetDocument(..), AddDocument(..), UpdateDocument(..), GetNextDocId(..))
@@ -56,7 +58,7 @@ getDocumentById did =
     do
       docset <- document
       case getOne docset of
-           (Just doc) -> appTemplate (title doc) foldrEditableHeaders (content doc)
+           (Just doc) -> appTemplate (title doc) foldrEditableHeaders (foldrContent (content doc))
            Nothing  -> appTemplate "No such document" () "We'd love to give you this document, but it doesn't exist."
 
 newDocument :: App Response
@@ -67,7 +69,7 @@ newDocument =
           update_ (AddDocument (mkDoc did))
           seeOther ("/foldr/" ++ (show did)) (toResponse ())
           where
-            mkDoc next = Document "Anonymous" next "Default title" "<p>Blank document</p>"
+            mkDoc next = Document "Anonymous" next "Default title" "<div>Blank document</div>"
 
 updateDocument :: App Response
 updateDocument = 
@@ -121,3 +123,7 @@ foldrDefaultBlurb =
   <h1>Welcome to Folder</h1>
   <p>You can't save the changes to this document, but click on some of the text to see what Folder allows you to do.</p>
   </div>
+
+foldrContent :: (EmbedAsChild (App) String) => String -> XMLGenT (App) XML
+foldrContent s  =
+             <span><% cdata s %></span>

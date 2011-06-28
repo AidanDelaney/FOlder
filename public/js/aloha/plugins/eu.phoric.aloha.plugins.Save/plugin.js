@@ -15,7 +15,7 @@ EXAMPLE.DummySavePlugin.init=function(){
 
 EXAMPLE.DummySavePlugin.save=function(){
     var content="";
-    jQuery.each(GENTICS.Aloha.editables,function(index,editable){content= "<div>"+editable.getContents()+"</div>"});
+    jQuery.each(GENTICS.Aloha.editables,function(index,editable){content=editable.getContents()});
     $.ajax({
 	type : "POST",
 	url  : "",
