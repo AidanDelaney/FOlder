@@ -106,5 +106,4 @@ foldrDefaultBlurb =
   <div>
   <h1>Welcome to Folder</h1>
   <p>You can't save the changes to this document, but click on some of the text to see what Folder allows you to do.</p>
-  <p>To create a new document <a href="/foldr/create">Click here</a>.</p>
   </div>
