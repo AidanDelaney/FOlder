@@ -46,7 +46,7 @@ appTemplate' title headers body =
         </div>
       </div>
     </div>
-  <footer><p>To create a new document <a href="new">Click here</a>.</p></footer>
+  <footer><p>To create a new document <a href="/foldr/new">Click here</a>.</p></footer>
   </body>
   </html>
 
