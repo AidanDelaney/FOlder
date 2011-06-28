@@ -36,8 +36,8 @@ Executable foldr-server
                 utf8-string,
                 safecopy,
                 acid-state,
-                text
-
+                text,
+                network
 
 
  if !os(windows)

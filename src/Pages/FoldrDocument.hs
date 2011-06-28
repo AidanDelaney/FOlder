@@ -16,6 +16,7 @@ import qualified Data.Text as T
 import HSP.ServerPartT           ()
 import Happstack.Server.HSP.HTML ()
 import Happstack.Data.IxSet      (getOne)
+import Network.URI               (unEscapeString)
 
 import Pages.AppTemplate         (appTemplate)
 import State                     (App)
@@ -81,7 +82,7 @@ updateDocumentById did =
     do
        title   <- look "title"
        content <- look "content"
-       update_ (UpdateDocument (Document "Anonymous" did title content))
+       update_ (UpdateDocument (Document "Anonymous" did (unEscapeString title) (unEscapeString content)))
        appTemplate "Folder" () ()
 
 -- TODO: After template mangling, what exactly is the return type of this?
@@ -126,4 +127,4 @@ foldrDefaultBlurb =
 
 foldrContent :: (EmbedAsChild (App) String) => String -> XMLGenT (App) XML
 foldrContent s  =
-             <span><% cdata s %></span>
+             <div id="foldr"><% cdata s %></div>
