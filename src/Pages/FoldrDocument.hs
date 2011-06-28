@@ -5,12 +5,11 @@ module Pages.FoldrDocument
      ) where
 
 import Control.Monad             (msum)
+import Control.Applicative       ((<$>))
 import Control.Monad.Reader      (ask)
 import Data.Maybe                (isNothing)
 import HSP
-import Happstack.Server          (FromReqURI(..), Method(GET, PUT, POST, DELETE), 
-                                  Response, ServerPart, ServerPartT, methodM, dir, 
-                                  path, methodOnly, seeOther, toResponse)
+import Happstack.Server
 import Data.Acid
 import Data.Char                 (isSpace, digitToInt)
 import HSP.ServerPartT           ()
@@ -18,7 +17,7 @@ import Happstack.Server.HSP.HTML ()
 import Happstack.Data.IxSet      (getOne)
 import Pages.AppTemplate         (appTemplate)
 import State                     (App)
-import State.Foldr               (DocId(..), GetDocument(..), AddDocument(..), GetNextDocId(..))
+import State.Foldr               (DocId(..), GetDocument(..), AddDocument(..), UpdateDocument(..), GetNextDocId(..))
 import Types.Foldr               (Foldr(..), Document(..))
 
 foldrDocument :: App Response
@@ -30,7 +29,7 @@ foldrDocument =
        -- PUT /id    -> edit doc of specific id
        -- DELETE /id -> delete doc of specific id
        -- /new       -> Form which POSTs content to /
-       msum [getFoldr, getDocument, newDocument]
+       msum [getFoldr, getDocument, newDocument, updateDocument]
 
 getFoldr :: App Response
 getFoldr = 
@@ -67,6 +66,14 @@ newDocument =
           seeOther ("/foldr/" ++ (show did)) (toResponse ())
           where
             mkDoc next = Document "Anonymous" next "Default title" "<p>Blank document</p>"
+
+updateDocument :: App Response
+updateDocument = 
+    do methodOnly POST -- FIXME: Should be PUT
+       title   <- look "title"
+       content <- look "content"
+       update_ (UpdateDocument (Document "Anonymous" (DocId 0) title content))
+       appTemplate "Folder" () ()
 
 -- TODO: After template mangling, what exactly is the return type of this?
 foldrEditableHeaders :: XMLGenT (App) XML

@@ -14,5 +14,5 @@ EXAMPLE.DummySavePlugin.init=function(){
   EXAMPLE.DummySavePlugin.save=function(){
    var content="";
    jQuery.each(GENTICS.Aloha.editables,function(index,editable){content=content+"Editable ID: "+editable.getId()+"\nHTML code: "+editable.getContents()+"\n\n"});
-   alert(this.i18n("saveMessage")+"\n\n"+content)
+   alert("<div>"+content+"</div>")
   };
