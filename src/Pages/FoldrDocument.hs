@@ -55,7 +55,9 @@ getDocumentById did =
     let document = query_ (GetDocument did) in
     do
       docset <- document
-      appTemplate "Folder" foldrEditableHeaders ("doc:" ++ (show (getOne docset)))
+      case getOne docset of
+           (Just doc) -> appTemplate (title doc) foldrEditableHeaders (content doc)
+           Nothing  -> appTemplate "No such document" () "We'd love to give you this document, but it doesn't exist."
 
 newDocument :: App Response
 newDocument =
