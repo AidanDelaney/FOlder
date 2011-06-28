@@ -70,9 +70,14 @@ newDocument =
 updateDocument :: App Response
 updateDocument = 
     do methodOnly POST -- FIXME: Should be PUT
+       path $ updateDocumentById
+
+updateDocumentById :: DocId -> App Response
+updateDocumentById did =
+    do
        title   <- look "title"
        content <- look "content"
-       update_ (UpdateDocument (Document "Anonymous" (DocId 0) title content))
+       update_ (UpdateDocument (Document "Anonymous" did title content))
        appTemplate "Folder" () ()
 
 -- TODO: After template mangling, what exactly is the return type of this?
