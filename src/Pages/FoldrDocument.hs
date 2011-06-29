@@ -127,4 +127,4 @@ foldrDefaultBlurb =
 
 foldrContent :: (EmbedAsChild (App) String) => String -> XMLGenT (App) XML
 foldrContent s  =
-             <div id="foldr"><% cdata s %></div>
+             <div id="foldr" contenteditable="true"><% cdata s %></div>

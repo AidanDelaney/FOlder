@@ -15,11 +15,11 @@ EXAMPLE.DummySavePlugin.init=function(){
 
 EXAMPLE.DummySavePlugin.save=function(){
     var content= encodeURIComponent($('div#foldr').html());
-
+    var title  = encodeURIComponent($('h1').html())
     $.ajax({
 	type : "POST",
 	url  : "",
-        data : 'content=' + content + '&title="Folder"',
+        data : 'content=' + content + '&title=' + title,
 	//success: function(msg){}; // do nothing
     });
 };
