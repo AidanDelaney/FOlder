@@ -68,7 +68,7 @@ newDocument =
        do methodM GET
           did   <- query_ GetNextDocId
           update_ (AddDocument (mkDoc did))
-          seeOther ("/foldr/" ++ (show did)) (toResponse ())
+          seeOther ("/foldr/" ++ (show $ theId did)) (toResponse ())
           where
             mkDoc next = Document "Anonymous" next "Default title" "<div>Blank document</div>"
 
