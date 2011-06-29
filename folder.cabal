@@ -27,6 +27,7 @@ Executable foldr-server
                 happstack-server,
                 happstack-state,
                 happstack-util,
+                happstack-authenticate,
                 hsp,
                 hsx,
                 hslogger,
@@ -37,7 +38,11 @@ Executable foldr-server
                 safecopy,
                 acid-state,
                 text,
-                network
+                network,
+                filepath,
+                web-routes,
+                web-routes-th,
+                web-routes-happstack
 
 
  if !os(windows)

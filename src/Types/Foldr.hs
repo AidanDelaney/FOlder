@@ -9,6 +9,8 @@ import Data.Data
 import Happstack.Data.Proxy
 import Happstack.Data.IxSet                  (IxSet(..), ixSet, ixGen, Indexable, (@=))
 import qualified Happstack.Data.IxSet        as IxSet
+-- Strangely SafeCopy => IxSet a is defined in here.
+import Happstack.Auth.Core.Auth
 import Data.Int
 
 newtype DocId = DocId { theId :: Int64 } deriving (Eq, Ord, Show, Data, Typeable, Read)
@@ -42,6 +44,8 @@ $(deriveSafeCopy 0 'base ''Document)
 $(deriveSafeCopy 1 'base ''Foldr)
 $(deriveSafeCopy 2 'base ''DocId)
 
+{-
 instance (SafeCopy a, Ord a, Typeable a, IxSet.Indexable a) => SafeCopy (IxSet a) where
     putCopy ixSet = contain $ safePut (IxSet.toList ixSet)
     getCopy = contain $ IxSet.fromList <$> safeGet
+-}
