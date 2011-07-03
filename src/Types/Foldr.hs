@@ -2,7 +2,7 @@
 module Types.Foldr where
 
 import Happstack.Data                        (Default, Version, deriveAll)
-import Happstack.State.ClockTime             () -- instance Data ClockTime
+--import Happstack.State.ClockTime             () -- instance Data ClockTime
 import Control.Applicative                   ( (<$>) )
 import Data.SafeCopy
 import Data.Data

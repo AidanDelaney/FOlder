@@ -27,7 +27,7 @@ Executable foldr-server
                 happstack-server,
                 happstack-state,
                 happstack-util,
-                happstack-authenticate,
+                happstack-authenticate >= 0.4.1,
                 hsp,
                 hsx,
                 hslogger,

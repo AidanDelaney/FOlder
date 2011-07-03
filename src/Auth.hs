@@ -112,6 +112,7 @@ withAuth f =
 defaultTemplate' :: (XMLGenerator m, EmbedAsChild m h, EmbedAsChild m b, HSX.XML m ~ XML) => String -> h -> b -> m Response
 defaultTemplate' t h b = liftM toResponse (defaultTemplate t h b)
 
+{-
 spec :: AuthData -> Maybe String -> Site SiteURL (App Response)
 spec acid realm =
     setDefault U_HomePage $
@@ -119,6 +120,7 @@ spec acid realm =
            , formatPathSegments  = \u -> (toPathSegments u, [])
            , parsePathSegments   = parseSegments fromPathSegments
            }
+
 
 handle :: AuthData -> Maybe String -> SiteURL -> RouteT SiteURL (App) Response
 handle auth@AuthData{..} realm url =
@@ -134,3 +136,4 @@ handle auth@AuthData{..} realm url =
 
 fooDocument :: AuthData ->  RouteT SiteURL (App) Response
 fooDocument AuthData{..} = lift $ foldrDocument
+-}
