@@ -27,6 +27,7 @@ appTemplate' title headers body =
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <title><% title %></title>
 
+  <link rel="stylesheet" href="/theme/FoldrDocument.css" />
   <link rel="stylesheet" href="/theme/AlohaDocument.css" />
 
   <script type="text/javascript" src="/js/aloha/aloha.js"></script>
@@ -35,10 +36,23 @@ appTemplate' title headers body =
   <script type="text/javascript" src="/js/aloha/plugins/com.gentics.aloha.plugins.List/plugin.js"></script>
   <script type="text/javascript" src="/js/aloha/plugins/com.gentics.aloha.plugins.Link/plugin.js"></script>
   <script type="text/javascript" src="/js/aloha/plugins/eu.phoric.aloha.plugins.Save/plugin.js"></script>
+  <script type="text/javascript">
+  foldr_save=function(){
+    var content= encodeURIComponent($('div#foldr').html());
+    var title  = encodeURIComponent($('h1').html())
+    $.ajax({
+	type : "POST",
+	url  : "",
+        data : 'content=' + content + '&title=' + title,
+	//success: function(msg){}; // do nothing
+    });
+  }
+  </script>
 
   <% headers %>
   </head>
   <body>
+    <header><ul><li> <a href="/foldr/new">New</a></li><li><a href="#" onClick="foldr_save();return false;">Save</a></li></ul></header>
     <div id="main"> 
       <div id="bodyContent">
         <div id="content" class="article">
@@ -46,7 +60,7 @@ appTemplate' title headers body =
         </div>
       </div>
     </div>
-  <footer><p>To create a new document <a href="/foldr/new">Click here</a>.</p></footer>
+  <footer><p>FOlder, (c) Aidan Delaney 2011, <a href="http://darcsden.com/AidanDelaney/FOlder">Available under the AGPL</a>; <a href="https://flattr.com/thing/331345/FOlder">Donate</a>.</p></footer>
   </body>
   </html>
 
